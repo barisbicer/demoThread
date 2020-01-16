@@ -1,0 +1,72 @@
+package com.thread.atm;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
+class Counter
+{
+	int count=0; 
+	
+	public void increment()
+	{
+		count++;
+	}
+}
+
+
+
+class Counter1
+{
+	AtomicInteger count= new AtomicInteger(); 
+	
+	public void increment()
+	{
+		count.incrementAndGet();
+	}
+}
+
+
+public class Test1 
+{
+	public static void main(String[] args) throws Exception
+	{
+		//Counter1 c = new Counter1();
+		Counter c = new Counter();
+		Counter c1 = new Counter();
+		
+		Thread t1 = new Thread(new Runnable() 
+				{
+			    	public void run() 
+			    	{
+			    		for(int i=1;i<=1000;i++)
+			    		{
+			    			c.increment();
+			    		}
+			    		
+			    	}
+			    });
+		
+		Thread t2 = new Thread(new Runnable() 
+		{
+	    	public void run() 
+	    	{
+	    		for(int i=1;i<=1000;i++)
+	    		{
+	    			c.increment();
+	    		}
+	    		
+	    	}
+	    });
+		
+		t1.start();
+		t2.start();
+		
+		t1.join();
+		t2.join();
+	
+		System.out.println(c.count);
+		System.out.println(c.hashCode());
+		System.out.println(c1.hashCode());
+		
+	}
+
+}
